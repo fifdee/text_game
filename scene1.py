@@ -1,9 +1,10 @@
 VALUES = {
     'nr': 1,
     'name': 'Pomieszczenie na szczycie wieży',
-    'description': 'Wbiegłeś tak szybko, jak to możliwe do pomieszczenia na samym szczycie wieży. Dyszysz bez '
-                   'opamiętania, ale przynajmniej zostawiłeś w tyle tych zbirów. Nie masz wiele czasu, słyszysz jak '
-                   'zaczynają wbiegać po schodach...',
+    'beginning': 'Wbiegłeś tak szybko, jak to możliwe do pomieszczenia na samym szczycie wieży. Dyszysz bez '
+                 'opamiętania, ale przynajmniej zostawiłeś w tyle tych zbirów. Nie masz wiele czasu, słyszysz jak '
+                 'zaczynają wbiegać po schodach...',
+    'description': 'Niewielkie pomieszczenie na szczycie wieży, przysypane sporą warstwą kurzu.',
     'items':
         [
             {
