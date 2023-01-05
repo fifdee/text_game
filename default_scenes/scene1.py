@@ -14,9 +14,9 @@ VALUES = {
                 'actions': [
                     {
                         'target': 'szklana kula',
-                        'result': 'zbiłeś szklaną kulę, w środku znalazłeś klucz',
-                        'show_hidden_item': 'klucz',
-                        'destroy_item': 'szklana kula',
+                        'result': 'Zbiłeś szklaną kulę, zauważasz, że w środku był klucz.',
+                        'show_hidden_item': ['klucz'],
+                        'destroy_item': ['szklana kula'],
                     }
                 ]
             },
@@ -28,9 +28,9 @@ VALUES = {
                 'actions': [
                     {
                         'target': 'drzwi',
-                        'result': 'klucz pasuje, otworzyłeś drzwi i przechodzisz dalej',
+                        'result': 'Klucz pasuje, otworzyłeś drzwi i przechodzisz dalej.',
                         'new_event': 'next_scene',
-                        'destroy_item': 'klucz',
+                        'destroy_item': ['klucz', 'drzwi'],
                     }
                 ]
             },
