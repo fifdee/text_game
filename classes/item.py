@@ -1,4 +1,4 @@
-from classes.Action import Action
+from classes.action import Action
 
 
 class Item:
@@ -9,12 +9,14 @@ class Item:
         except KeyError:
             self.collectible = False
         try:
+            self.starts_in_inventory = kwargs['starts_in_inventory']
+        except KeyError:
+            self.starts_in_inventory = False
+        try:
             self.hidden = kwargs['hidden']
         except KeyError:
             self.hidden = False
         self.description = kwargs['description']
-
-        self.taken = False
 
         try:
             self.actions = [Action(**action) for action in kwargs['actions']]

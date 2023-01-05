@@ -1,24 +1,26 @@
-from default_scenes import scene1
-from classes.Player import Player
-from classes.Scene import Scene
+import sys
+
+from default_scenes import scene1, scene2
+from classes.player import Player
+from classes.scene import Scene
+from classes.file_manager import FileManager
 
 
 class Game:
     class GameState:
-        WAITING = 'waiting'
         START = 'start'
         PLAYING = 'playing'
-        FINISHED = 'finished'
 
     ALLOWED_COMMANDS = ['h', 'd', 'i', 'u', 't', 'q']
 
     state = GameState.START
     player = None
     current_scene = None
+    scene_number = 1
 
     @classmethod
     def help(cls):
-        print('h - dostępne komendy (help)')
+        print('h - pomoc (help)')
         print('d - opisz pomieszczenie (describe)')
         print('i - wyświetl przedmioty z plecaka (inventory)')
         print('u - użyj przedmiot (use)')
@@ -26,18 +28,41 @@ class Game:
         print('q - zakończ program (quit)')
 
     @classmethod
-    def start_new(cls):
-        cls.player = Player()
-        cls.current_scene = Scene(**scene1.VALUES)
-        cls.help()
-        cls.current_scene.show_beginning_text()
+    def start(cls):
+        # FileManager.default_scene_dump(scene1.VALUES)  # Do stworzenia pliku json z zawartością danej sceny
+        # FileManager.default_scene_dump(scene2.VALUES)  # Standardowo program pobiera dane z plików json
+
+        cls.scene_number = FileManager.load_scene_number()
+        if FileManager.is_scene_available(cls.scene_number):
+            cls.player = Player()
+            values = FileManager.get_scene_values(cls.scene_number)
+            cls.current_scene = Scene(**values)
+            cls.set_inventory()
+            cls.current_scene.show_beginning_text()
+
+            cls.state = cls.GameState.PLAYING
+
+            cls.help()
+        else:
+            print('Gratulacje! Przeszedłeś wszystkie dostępne sceny.')
+            print('Chcesz zacząć od nowa? Wpisz "reset".')
+            if input() == 'reset':
+                FileManager.save_scene_number(1)
+            else:
+                sys.exit()
+
+    @classmethod
+    def set_inventory(cls):
+        inventory_items = [item for item in cls.current_scene.items if item.starts_in_inventory]
+        for item in inventory_items:
+            cls.player.take_item(item, silent=True)
+            cls.current_scene.remove_item(item)
 
     @classmethod
     def update(cls):
         while True:
             if cls.state == cls.GameState.START:
-                cls.start_new()
-                cls.state = cls.GameState.PLAYING
+                cls.start()
             elif cls.state == cls.GameState.PLAYING:
                 print(f'Dostępne komendy: {cls.ALLOWED_COMMANDS}')
                 command = input()
@@ -86,7 +111,8 @@ class Game:
             else:
                 chosen_item_name = provided_name
             if chosen_item_name not in [item.name for item in items_to_choose]:
-                print('Wprowadzono niepoprawną nazwę przedmiotu.')
+                if not provided_name:
+                    print(f'Wprowadzono niepoprawną nazwę przedmiotu: {chosen_item_name}')
                 return None
             chosen_item = [item for item in items_to_choose if item.name == chosen_item_name][0]
             return chosen_item
@@ -120,7 +146,15 @@ class Game:
                             cls.current_scene.items,
                             provided_name=hidden_name,
                             include_hidden=True)
-                        item_to_show.hidden = False
+
+                        if not item_to_show:
+                            item_to_show = cls.get_item_by_input_name(
+                                cls.player.items,
+                                provided_name=hidden_name,
+                                include_hidden=True)
+
+                        if item_to_show:
+                            item_to_show.hidden = False
 
                 if action.destroy_item_names:
                     for destroy_name in action.destroy_item_names:
@@ -133,8 +167,9 @@ class Game:
 
                 if action.new_event_name:
                     if action.new_event_name == 'next_scene':
-                        print('nowa scena')
+                        cls.finish()
 
     @classmethod
     def finish(cls):
-        ...
+        FileManager.save_scene_number(cls.scene_number + 1)
+        cls.state = cls.GameState.START

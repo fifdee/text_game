@@ -2,8 +2,7 @@ VALUES = {
     'nr': 1,
     'name': 'Pomieszczenie na szczycie wieży',
     'beginning': 'Wbiegłeś tak szybko, jak to możliwe do pomieszczenia na samym szczycie wieży. Dyszysz bez '
-                 'opamiętania, ale przynajmniej zostawiłeś w tyle tych zbirów. Nie masz wiele czasu, słyszysz jak '
-                 'zaczynają wbiegać po schodach...',
+                 'opamiętania, ale przynajmniej masz kryjówkę i czas, żeby pomyśleć jak opuścić ten przeklęty zamek.',
     'description': 'Niewielkie pomieszczenie na szczycie wieży, przysypane sporą warstwą kurzu.',
     'items':
         [
@@ -14,9 +13,10 @@ VALUES = {
                 'actions': [
                     {
                         'target': 'szklana kula',
-                        'result': 'Zbiłeś szklaną kulę, zauważasz, że w środku był klucz.',
+                        'result': 'Zbiłeś szklaną kulę, przy okazji łamiąc pałkę. '
+                                  'Zauważasz, że w środku kuli był klucz.',
                         'show_hidden_item': ['klucz'],
-                        'destroy_item': ['szklana kula'],
+                        'destroy_item': ['szklana kula', 'pałka'],
                     }
                 ]
             },

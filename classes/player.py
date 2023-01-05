@@ -6,7 +6,8 @@ class Player:
         if len(self.items) > 0:
             print('Przedmioty w plecaku:')
             for item in self.items:
-                print(item)
+                if not item.hidden:
+                    print(item)
         else:
             print('Nie masz nic w plecaku.')
 
@@ -19,10 +20,11 @@ class Player:
                 print(action.result)
         return actions
 
-    def take_item(self, item):
+    def take_item(self, item, silent=False):
         if item.collectible:
             self.items.append(item)
-            print(f'Nowy przedmiot w plecaku: {item}')
+            if not silent:
+                print(f'Nowy przedmiot w plecaku: {item}')
             return True
         else:
             print(f'Próbujesz schować przedmiot "{item}" do plecaka, bez sukcesu.')

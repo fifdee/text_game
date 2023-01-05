@@ -1,4 +1,4 @@
-from classes.Item import Item
+from classes.item import Item
 
 
 class Scene:
@@ -23,7 +23,7 @@ class Scene:
     def describe(self):
         print(self.description)
         print('Przedmioty, które widzisz dookoła:')
-        if len(self.items) > 0:
+        if len([item for item in self.items if not item.hidden]) > 0:
             for item in self.items:
                 if not item.hidden:
                     print(item.description)
